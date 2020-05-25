@@ -1,0 +1,79 @@
+# ############ Pantos Exercise
+
+install.packages("shiny")
+library(shiny)
+runExample()
+sessionInfo()
+update.packages(ask =FALSE)
+
+
+ui <- fluidPage(
+    # Application title
+    titlePanel(title=h2("SAP Manual Slip Approval Status", align="center")),
+    # Sidebar with a select input for number of bins
+    sidebarLayout(
+        fluidRow(
+            column(4,
+                   selectInput("ComCode",
+                               "Company Code :",
+                               c("All",
+                                 unique(as.character(GG$ComCode))))),
+                    column(4,
+                           selectInput("AppType",
+                                       "Approval Type :",
+                                       c("All",
+                                         unique(as.character(GG$AppType))))),
+                ),
+                    column(4,
+                           selectInput("DocType",
+                                       "Document Type :",
+                                       c("All",
+                                         unique(as.character(GG$DocType))))),
+                ),# sidebarPanel
+    # Show a plot of the generated distribution
+    mainPanel(
+        tabsetPanel(type="tab",
+                    tabPanel("Data", DT::dataTableOutput("table")),
+                    tabPanel("Summary", verbatimTextOutput("sum")),
+                    tabPanel("Structure", verbatimTextOutput("str")),
+                    tabPanel("Plot", plotOutput("myggplot"))
+        ) # mainPanel
+    ) # sidebarLayout
+) # fluidPage
+
+# Define server logic required to draw a histogram
+server <- function(input, output, session) {
+    # Filter data based on selections
+    output$table <- DT::renderDataTable(DT::datatable({
+        data <- GG
+        if (input$ComCode != "All") {
+            data <- data[data$ComCode == input$ComCode,]
+        }
+        if (input$AppType != "All") {
+            data <- data[data$AppType == input$AppType,]
+        }
+        if (input$DocType != "All") {
+            data <- data[data$DocType == input$DocType,]
+        }
+        data
+    }))
+
+   
+    output$sum <- renderPrint({
+        summary(GG)
+    })
+   
+   
+    output$str <- renderPrint({
+        str(GG)
+    })
+
+   
+    output$myggplot <- renderPlot({
+        SSG
+    })
+}
+
+
+# Run the application
+shinyApp(ui = ui, server = server)
