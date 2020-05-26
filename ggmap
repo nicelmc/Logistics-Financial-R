@@ -1,0 +1,45 @@
+# Pantos Internal Control SAP Slip Integration Approval Analysis (ggmap Chart)
+
+# installing/loading the package:
+if(!require(installr)) {
+  install.packages("installr"); require(installr)} #load / install+load installr
+
+# using the package:
+updateR() # this will start the updating process of your R installation.  It will check for newer versions, and if one is available, will guide you through the decisions you'd need to make.
+
+install.packages("ggmap")
+library(ggmap)
+devtools::install_github("dkahle/ggmap")
+library(httr)
+set_config(use_proxy(url="10.3.100.207",port=8080))
+
+install.packages("curl")
+library(curl)
+
+install.packages("vctrs")
+library(vctrs)
+remove.packages("vctrs")
+
+install.packages('devtools')
+library('devtools')
+
+register_google(key = 'AIzaSyBrUcwMtAX3mNqpvd5F4P48AM0FtFN0eXY')
+
+seoul_map <- get_map("seoul", zoom=11, maptype="hybrid")
+ggmap(seoul_map)
+
+gc <- geocode("seoul")
+center <- as.numeric(gc)
+map <- get_googlemap(center=center,language="ko-KR", color="bw", zoom=15)
+ggmap(map, extent="panel", maptype="terrain") # device, normal, panel
+maptype <- c("terrain", "satellite", "roadmap", " hybrid")
+
+df <- round(data.frame(x=jitter(rep(-95.36,5), amount=.3),
+                       y=jitter(rep(29.76, 5), amount=.3)),
+            digits=2)
+df
+
+map <- get_googlemap("houston", marker=df, path=df)
+ggmap(map)
+
+
