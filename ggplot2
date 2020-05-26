@@ -77,3 +77,6 @@ SSG <- ggplot(GG, aes(y=Total, x=reorder(ComCode, Total))) +
 SSG
 View(GG)
 str(GG)
+
+
+
