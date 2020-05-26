@@ -42,4 +42,40 @@ df
 map <- get_googlemap("houston", marker=df, path=df)
 ggmap(map)
 
+##################### ggmap 세계 공항이용객 현황
+
+library(rvest)
+library(ggplot2)
+library(ggmap)
+install.packages("maps")
+library(maps)
+
+html.airports <-  read_html( "https://en.wikipedia.org/wiki/List_of_busiest_airports_by_passenger_traffic")
+df  <-  html_table(html_nodes(html.airports, "table")[[1]], fill = TRUE)
+head(df)
+str(df)
+
+# Data Preprocessing
+# rename: two lined-word=>one word
+colnames(df)[5]="Code"
+colnames(df)[6]="TotalPassenger"
+colnames(df)[7]="RankChange"
+colnames(df)[8]="Change%"
+# Type conversion
+df$TotalPassenger=gsub(',','',df$TotalPassenger)
+df$TotalPassenger=as.numeric(df$TotalPassenger)
+head(df)
+View(df)
+
+# Visualize the TotalPassenger over the world map
+gc <- geocode(df$Airport) #get longitude and lattitude data for each of the airport
+df <- cbind(df, gc) #combine (long,lati) data into the data frame for visualization)
+head(df)
+world <- map_data("world")
+ggplot(df, aes(x=lon, y=lat)) +
+  geom_polygon(data=world, aes(x=long, y=lat, group=group), fill="grey75", color="grey70") +
+  geom_point(color="dark red", alpha=.25, aes(size=TotalPassenger)) +
+  geom_point(color="dark red", alpha=.75, shape=1, aes(size=TotalPassenger)) +
+  theme(legend.position='none')
+
 
