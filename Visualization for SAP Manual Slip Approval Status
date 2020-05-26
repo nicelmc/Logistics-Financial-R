@@ -1,4 +1,4 @@
-# ############ Pantos Exercise
+# ############ Pantos Exercise 1
 
 install.packages("shiny")
 runExample()
@@ -98,3 +98,92 @@ server <- function(input, output, session) {
 # Run the application
 shinyApp(ui = ui, server = server)
 
+# ############ Pantos Exercise 2
+
+install.packages("shiny")
+runExample()
+sessionInfo()
+update.packages(ask =FALSE)
+
+
+library(shiny)
+
+ui <- fluidPage(
+    # Application title
+    titlePanel(title=h2("SAP Manual Slip Approval Status", align="center")),
+    # Sidebar with a select input for number of bins
+    sidebarLayout(
+        fluidRow(
+            column(4,
+                   selectInput("ComCode",
+                               "Company Code :",
+                               c("All",
+                                 unique(as.character(GG$ComCode))))),
+            column(4,
+                   selectInput("AppType",
+                               "Approval Type :",
+                               c("All",
+                                 unique(as.character(GG$AppType))))),
+        ),
+    ),# sidebarPanel
+    # Show a plot of the generated distribution
+    mainPanel(
+        tabsetPanel(type="tab",
+                    tabPanel("Data", DT::dataTableOutput("table")),
+                    tabPanel("Plot", plotOutput("myggplot")),
+                    tabPanel("Summary", verbatimTextOutput("sum")),
+                    tabPanel("Structure", verbatimTextOutput("str"))
+                    
+        ) # mainPanel
+    ) # sidebarLayout
+) # fluidPage
+
+# Define server logic required to draw a histogram
+server <- function(input, output, session) {
+    # Filter data based on selections
+    output$table <- DT::renderDataTable(DT::datatable({
+        data <- GG
+        if (input$ComCode != "All") {
+            data <- data[data$ComCode == input$ComCode,]
+        }
+        if (input$AppType != "All") {
+            data <- data[data$AppType == input$AppType,]
+        }
+        data
+    }))
+    
+    output$myggplot <- renderPlot({
+        data <- GG
+        if (input$ComCode != "All") {
+            data <- data[data$ComCode == input$ComCode,]
+        }
+        ggplot(data, aes(x=reorder(ComCode, Total), y=Total, color=DocType, shape=AppType)) +
+            geom_point(size=3) +
+            ggtitle("ComCode AppType Count") +
+            theme(plot.title=element_text(size=12)) +
+            geom_text(aes(label=DocType))
+        
+        if (input$AppType != "All") {
+            data <- data[data$AppType == input$AppType,]
+        }
+        ggplot(data, aes(x=reorder(ComCode, Total), y=Total, color=DocType, shape=AppType)) +
+            geom_point(size=3) +
+            ggtitle("ComCode AppType Count") +
+            theme(plot.title=element_text(size=12)) +
+            geom_text(aes(label=DocType))
+        
+    })
+    
+    output$sum <- renderPrint({
+        summary(GG)
+    })
+    
+    output$str <- renderPrint({
+        str(GG)
+    })
+    
+}
+
+
+# Run the application
+shinyApp(ui = ui, server = server)
