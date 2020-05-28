@@ -1,0 +1,91 @@
+
+
+CoCd	ComName	Location	Currency	Airport	Country
+A100	PANTOS HQ	SEOUL	KRW	 Seoul Incheon International Airport	South Korea
+A200	PANTOS BUSAN NEWPORT	CHANGWON	KRW	 Gimhae International Airport	South Korea
+A600	HELISTAR AIR CO., LTD	SEOUL	KRW		
+A700	HANULTARI	SEOUL	KRW		
+B100	PANTOS CHINA	QINGDAO	CNY	Qingdao Liuting International Airport	China
+B110	PANTOS CHINA TIANJIN BR.	TIANJIN	CNY	Tianjin Binhai  International Airport	China
+B120	PANTOS CHINA SHANGHAI BR.	SHANGHAI	CNY	 Shanghai Pudong International Airport	China
+B130	PANTOS CHINA DALIAN BR.	DALIAN	CNY	 Dalian Zhoushuizi International Airport	China
+B140	PANTOS CHINA BEIJING BR.	BEIJING	CNY	 Beijing Capital International Airport	China
+B200	HUILIAN LOGISTICS	BEIJING	CNY	 Beijing Capital International Airport	China
+B300	PANTOS (SHANGHAI)	SHANGHAI	CNY	 Shanghai Pudong International Airport	China
+B310	PANTOS SH NANJING BR.	NANJING	CNY	 Nanjing Lukou International Airport	China
+B400	PANTOS (NINGBO)	NINGBO	CNY	 Ningbo Lishe International Airport	China
+B500	PANTOS (SHENZHEN)	SHENZHEN	CNY	 Shenzhen Bao'an International Airport	China
+B510	PANTOS (SHENZHEN) GZ BR.	GUANGZHOU	CNY	 Guangzhou Baiyun International Airport	China
+B600	PANTOS HONGKONG	HONG KONG	HKD	 Hong Kong International Airport	Hong Kong SAR, China
+B700	PANTOS TAIWAN	TAIPEI CITY	TWD	 Taiwan Taoyuan International Airport	Taiwan
+B800	HILOGISTICS CHINA	NANJING	CNY	 Nanjing Lukou International Airport	China
+B810	HILOGISTICS CHINA NANJING	NANJING	CNY	 Nanjing Lukou International Airport	China
+B820	HILOGISTICS CHINA GUANGZH	GUANGZH	CNY		
+B830	HILOGISTICS CHINA TAIZHOU	TAIZHOU	CNY		
+B900	Onecube Int. Logistics	SHANGHAI,PUDONG	CNY	 Shanghai Pudong International Airport	China
+C100	PT. PANTOS INDONESIA	BEKASI	IDR	 Soekarno–Hatta International Airport	Indonesia
+C200	PT. PANTOS JAKARTA	BEKASI	IDR	 Soekarno–Hatta International Airport	Indonesia
+C300	PANTOS SINGAPORE	SINGAPORE	SGD	 Singapore Changi Airport	Singapore
+C400	PANTOS THAILAND	BANGKOK	THB	 Suvarnabhumi Airport	Thailand
+C500	PANTOS MALAYSIA	SEPANG	MYR	 Kuala Lumpur International Airport	Malaysia
+C600	PANTOS INDIA	GURGAON	INR	 Indira Gandhi International Airport	India
+C700	PANTOS CAMBODIA	PHNOM PENH	KHR		
+C800	PANTOS VIETNAM	HOCHIMINH CITY	VND	 Tan Son Nhat International Airport	
+C900	PANTOS AUSTRALIA	SYDNEY	AUD	 Sydney Airport	Australia
+CA00	PT. PANTOS EXPRESS ID	BEKASI	IDR	 Soekarno–Hatta International Airport	Indonesia
+CB00	PANTOS PHILIPPINES INC	PASIG	PHP	 Ninoy Aquino International Airport	Philippines
+CC00	PANTOS THAILAND HOLDINGS	BANGKOK	THB	 Suvarnabhumi Airport	Thailand
+CE00	HILOGISTICS MALAYSIA	Selangor	MYR	 Kuala Lumpur International Airport	Malaysia
+CF00	PANTOS INDIA PRIVATE	GREATER NOIDA	INR	Jewar International Airport 	India
+CG00	HILOGISTICS VIETNAM	Hai Phong	VND	Cat Bi International Airport	
+D100	PANTOS U.K.	LONDON	GBP	 London Heathrow Airport	United Kingdom
+D200	PANTOS BENELUX	AMSTERDAM	EUR	 Amsterdam Airport Schiphol	Netherlands
+D300	PANTOS FRANCE	PARIS	EUR	 Paris-Charles de Gaulle Airport	France
+D400	PANTOS POLAND	WARSAW	PLN	Warsaw Chopin Airport	Poland
+D500	PANTOS GERMANY	RAUNHEIM	EUR	 Frankfurt Airport	Germany
+D600	PANTOS SPAIN	VALENCIA	EUR	 Valencia Airport	Spain
+D700	PANTOS AUSTRIA	VIENNA	EUR	Vienna International Airport	Austria
+D800	PANTOS ITALY	MILAN	EUR	 Milan Malpensa Airport	Italy
+D900	PANTOS TURKEY	ISTANBUL	TRY	 Istanbul Atatürk Airport	Turkey
+DA00	HILOGISTICS EUROPE	OOSTERHOUT	EUR	 Amsterdam Airport Schiphol	Netherlands
+DA10	HILOGISTICS EUROPE SPAIN	AZUQUECA DE HENARES	EUR	 Madrid Barajas Airport	Spain
+DA20	HILOGISTICS EUROPE POLAND	BISKUPICE PODGORNE	EUR	Warsaw Modlin Airport	Poland
+DA30	HILOGISTICS EUROPE FRANCE	COMBS LA VILLE	EUR	 Paris-Charles de Gaulle Airport	France
+DA40	HILOGISTICS EUROPE S.AFRI	JOHANNESBURG	ZAR	O. R. Tambo International Airport	
+DA50	HILOGISTICS EUROPE UK	COVENTRY	GBP	Coventry Airport	
+DB00	PANTOS U.K. NORDIC FILIAL	STOCKHOLM	SEK	Stockholm Arlanda Airport	Sweden
+DC00	PANTOS LOGISTICS SWEDEN	STOCKHOLM	SEK	Stockholm Arlanda Airport	Sweden
+DD00	PANTOS LOGISTICS HUNGARY	BUDAPEST	HUF	Budapest Ferenc Liszt International Airport	HUNGARY
+E100	PANTOS LOGISTICS, INC.	LOS ANGELES	USD	 Los Angeles International Airport	United States
+E200	FNS, INC.	LOS ANGELES	USD	 Los Angeles International Airport	United States
+E300	FNS CHB, INC.	LOS ANGELES	USD	 Los Angeles International Airport	United States
+E400	Pantos USA Inc.	NEW JERSEY	USD	 Newark Liberty International Airport	United States
+E500	PANTOS MEXICO	SAN PEDRO GARZA GARCIA	MXN	 Benito Juárez International Airport	Mexico
+E600	PANTOS CANADA	TORONTO	CAD	 Toronto Pearson International Airport	Canada
+E700	PANTOS BRAZIL	SAO PAULO	BRL	 São Paulo–Guarulhos International Airport	Brazil
+E800	PANTOS PANAMA	FRANCEFIELD	PAB	Tocumen International Airport 	PANAMA
+E900	PANTOS COLOMBIA	CALLE 98A #51-37, BOGOTA	COP	El Dorado International Airport	COLOMBIA
+EA00	JEFFREY LOGISTICS LLC	NJ	USD	 Newark Liberty International Airport	United States
+EB00	PANTOS CHILE	Santiago	CLP	El Bosque Airport	CHILE
+EC00	PANTOS LOGISTICS PANAMA S	PANAMA CITY	PAB		
+EE00	HILOGISTICS USA	FONTANA, CALIFORNIA	USD		
+EF00	PANTOS LOGISTICS AR	BUENOS AIRES	ARS		
+EG00	HILOGISTICS MEXICO REYNOS	Reynosa	MXN		
+EH00	HILOGISTICS VANCOUVER	VANCOUVER	CAD		
+EJ00	Great America Trans, Inc.	CALIFORNIA	USD		
+F100	FNS (CIS) L.L.C.	MOSCOW	RUB		
+F200	PANTOS KAZAKHSTAN	ALMATY	KZT		
+F300	FNS UKRAINE	KIEV	UAH		
+F500	PANTOS CUSTOM SERVICE	MOSCOW	RUB	 Sheremetyevo International Airport	Russia
+F600	HILOGISTICS RUSSIA	MOSCOW	RUB		
+G100	PANTOS DUBAI	DUBAI	AED		
+G200	PANTOS EXPRESS LLC	DUBAI	AED		
+G300	PANTOS OMAN	SOHAR	OMR		
+G400	PANTOS SAUDI ARABIA	JEDDAH	SAR		
+G500	PANTOS SOUTH AFRICA		ZAR		
+G600	PANTOS KENYA LIMITED	MOMBASA	KES		
+G700	PANTOS EGYPT	CAIRO	EGP		
+G800	HILOGISTICS DUBAI	DUBAI	AED	 Dubai International Airport	United Arab Emirates
+G900	HILOGISTICS EGYPT	CAIRO	EGP		
+GA00	PANTOS LOGISTICS NIGERIA	LAGOS	NGN		
+H100	PANTOS JAPAN	TOKYO	JPY	 Tokyo Haneda Airport	Japan
