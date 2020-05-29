@@ -1,3 +1,25 @@
+# Int'l Airport ggmap
+
+library(readxl)
+GGMAP_Airport_TEST <- read_excel("GGMAP Airport TEST.xlsx")
+View(GGMAP_Airport_TEST)
+GG <- GGMAP_Airport_TEST
+
+register_google(key = 'AIzaSyBrUcwMtAX3mNqpvd5F4P48AM0FtFN0e@@')
+library(ggmap)
+gc <- geocode(GGMAP_Airport_TEST$Airport)
+View(gc)
+df <- cbind(GG,gc)
+View(df)
+
+world <- map_data("world")
+ggplot(df, aes(x=lon, y=lat)) +
+  geom_polygon(data=world, aes(x=long, y=lat, group=group), fill="grey75", color="grey70") +
+  geom_point(color="dark red", alpha=.25, aes(size=Total)) +
+  geom_point(color="dark red", alpha=.75, shape=1, aes(size=Total)) +
+  theme(legend.position='none')
+
+# Int'l Airport
 
 CoCd	ComName	Location	Currency	Airport	Country
 A100	PANTOS HQ	SEOUL	KRW	 Seoul Incheon International Airport	South Korea
