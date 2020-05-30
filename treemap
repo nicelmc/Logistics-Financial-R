@@ -1,0 +1,18 @@
+# library
+library(treemap)
+
+# Create data
+str(GG)
+GG_Group <- GG$ComCode
+GG_Value <- GG$Total
+GG_data <- data.frame(GG_Group, GG_Value)
+
+group <- c("group-1","group-2","group-3")
+value <- c(13,5,22)
+data <- data.frame(group,value)
+
+# treemap
+treemap(GG_data,
+        index="GG_Group",
+        vSize="GG_Value",
+        type="index")
