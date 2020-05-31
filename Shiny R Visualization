@@ -1,0 +1,192 @@
+# ############ Pantos Exercise
+
+install.packages("shiny")
+runExample()
+sessionInfo()
+update.packages(ask =FALSE)
+
+library(shiny)
+
+ui <- fluidPage(
+  # Application title
+  titlePanel(title=h2("SAP Manual Slip Approval Status", align="center")),
+  # Sidebar with a select input for number of bins
+  sidebarLayout(
+    fluidRow(
+      column(4,
+             selectInput("ComCode",
+                         "Company Code :",
+                         c("All",
+                           unique(as.character(GG$ComCode))))),
+      column(4,
+             selectInput("AppType",
+                         "Approval Type :",
+                         c("All",
+                           unique(as.character(GG$AppType))))),
+    ),
+    column(4,
+           selectInput("DocType",
+                       "Document Type :",
+                       c("All",
+                         unique(as.character(GG$DocType))))),
+  ),# sidebarPanel
+  # Show a plot of the generated distribution
+  mainPanel(
+    tabsetPanel(type="tab",
+                tabPanel("Data", DT::dataTableOutput("table")),
+                tabPanel("Plot_bubble", plotOutput("gg_bubble")),
+                tabPanel("Plot_rainbow", plotOutput("gg_rainbow")),
+                tabPanel("Plot_bar", plotOutput("gg_bar")),
+                tabPanel("Plot_tree", plotOutput("gg_tree")),
+                tabPanel("Summary", verbatimTextOutput("sum")),
+                tabPanel("Structure", verbatimTextOutput("str"))
+                
+    ) # mainPanel
+  ) # sidebarLayout
+) # fluidPage
+
+# Define server logic required to draw a histogram
+server <- function(input, output, session) {
+  # Filter data based on selections
+  output$table <- DT::renderDataTable(DT::datatable({
+    data <- GG
+    if (input$ComCode != "All") {
+      data <- data[data$ComCode == input$ComCode,]
+    }
+    if (input$AppType != "All") {
+      data <- data[data$AppType == input$AppType,]
+    }
+    if (input$DocType != "All") {
+      data <- data[data$DocType == input$DocType,]
+    }
+    data
+    
+  }))
+
+  output$gg_bubble <- renderPlot({
+    data <- GG
+    
+    if (input$ComCode != "All") {
+      data <- data[data$ComCode == input$ComCode,]
+    }
+    ggplot(data, aes(y=Total, x=reorder(ComCode, Total))) +
+      geom_point(aes(size=Total), shape=21, color="black", fill="yellow", alpha=0.9) +
+      ggtitle("ComCode AppType Count") +
+      theme(plot.title=element_text(size=12)) +
+      geom_text(aes(label=DocType, vjust=-1, hjust=1)) +
+      geom_text(aes(label=Total))
+    
+    if (input$AppType != "All") {
+      data <- data[data$AppType == input$AppType,]
+    }
+    ggplot(data, aes(y=Total, x=reorder(ComCode, Total))) +
+      geom_point(aes(size=Total), shape=21, color="black", fill="yellow", alpha=0.9) +
+      ggtitle("ComCode AppType Count") +
+      theme(plot.title=element_text(size=12)) +
+      geom_text(aes(label=DocType, vjust=-1, hjust=1)) +
+      geom_text(aes(label=Total))
+    
+    if (input$DocType != "All") {
+      data <- data[data$DocType == input$DocType,]
+    }
+    ggplot(data, aes(y=Total, x=reorder(ComCode, Total))) +
+      geom_point(aes(size=Total), shape=21, color="black", fill="yellow", alpha=0.9) +
+      ggtitle("ComCode AppType Count") +
+      theme(plot.title=element_text(size=12)) +
+      geom_text(aes(label=DocType, vjust=-1, hjust=1)) +
+      geom_text(aes(label=Total))
+    })
+  
+  output$gg_rainbow <- renderPlot({
+    data <- GG
+    
+    if (input$ComCode != "All") {
+      data <- data[data$ComCode == input$ComCode,]
+    }
+    ggplot(GG, aes(x=reorder(ComCode, Total), y=Total, color=DocType, shape=AppType)) +
+      geom_point(size=3) +
+      ggtitle("ComCode AppType Count") +
+      theme(plot.title=element_text(size=12)) +
+      geom_text(aes(label=DocType))
+  })
+  
+  if (input$AppType != "All") {
+    data <- data[data$AppType == input$AppType,]
+    }
+  ggplot(GG, aes(x=reorder(ComCode, Total), y=Total, color=DocType, shape=AppType)) +
+    geom_point(size=3) +
+    ggtitle("ComCode AppType Count") +
+    theme(plot.title=element_text(size=12)) +
+    geom_text(aes(label=DocType))
+  
+  if (input$DocType != "All") {
+    data <- data[data$DocType == input$DocType,]
+  }
+  ggplot(GG, aes(x=reorder(ComCode, Total), y=Total, color=DocType, shape=AppType)) +
+    geom_point(size=3) +
+    ggtitle("ComCode AppType Count") +
+    theme(plot.title=element_text(size=12)) +
+    geom_text(aes(label=DocType))
+  
+  
+  output$gg_bar <- renderPlot({
+    data <- GG
+    
+    if (input$ComCode != "All") {
+      data <- data[data$ComCode == input$ComCode,]
+    }
+    ggplot(GG, aes(x=Total, y=reorder(ComCode, Total, fill=AppType))) +
+      geom_bar(stat="identity", color="red") +
+      ggtitle("ComCode AppType Count") +
+      theme(plot.title=element_text(size=12)) +
+      geom_text(aes(label=DocType))
+  })
+  
+  output$gg_tree <- renderPlot({
+    data <- GG_data
+    
+    if (input$ComCode != "All") {
+      data <- data[data$ComCode == input$ComCode,]
+    }
+    treemap(data,
+             index=c("GG_Group", "GG_Subgroup"),
+             vSize="GG_Value",
+             type="index", 
+             palette="Set3",
+             title="My Treemap",
+             fontsize.title=15,
+             bg.labels=c("transparent"),
+             border.col=c("black","white"),             
+             border.lwds=c(2,1))
+  
+    if (input$AppType != "All") {
+      data <- data[data$AppType == input$AppType,]
+    }
+    ggplot(GG, aes(x=Total, y=reorder(ComCode, Total, fill=AppType))) +
+      geom_bar(stat="identity", color="red") +
+      ggtitle("ComCode AppType Count") +
+      theme(plot.title=element_text(size=12)) +
+      geom_text(aes(label=DocType))
+    
+    if (input$DocType != "All") {
+      data <- data[data$DocType == input$DocType,]
+    }
+    ggplot(GG, aes(x=Total, y=reorder(ComCode, Total, fill=AppType))) +
+      geom_bar(stat="identity", color="red") +
+      ggtitle("ComCode AppType Count") +
+      theme(plot.title=element_text(size=12)) +
+      geom_text(aes(label=DocType))
+    })
+  
+  output$sum <- renderPrint({
+    summary(GG)
+  })
+  
+  output$str <- renderPrint({
+    str(GG)
+  })
+
+}
+
+# Run the application
+shinyApp(ui = ui, server = server)
