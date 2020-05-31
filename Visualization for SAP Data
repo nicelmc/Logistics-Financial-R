@@ -1,3 +1,191 @@
+# ############ Pantos Exercise 3
+
+install.packages("shiny")
+runExample()
+sessionInfo()
+update.packages(ask =FALSE)
+
+
+library(shiny)
+
+ui <- fluidPage(
+  # Application title
+  titlePanel(title=h2("SAP Manual Slip Approval Status", align="center")),
+  # Sidebar with a select input for number of bins
+  sidebarLayout(
+    fluidRow(
+      column(4,
+             selectInput("ComCode",
+                         "Company Code :",
+                         c("All",
+                           unique(as.character(GG$ComCode))))),
+      column(4,
+             selectInput("AppType",
+                         "Approval Type :",
+                         c("All",
+                           unique(as.character(GG$AppType))))),
+    ),
+  ),# sidebarPanel
+  # Show a plot of the generated distribution
+  mainPanel(
+    tabsetPanel(type="tab",
+                tabPanel("Data", DT::dataTableOutput("table")),
+                tabPanel("Plot_bar", plotOutput("gg_bar")),
+                tabPanel("Plot_rainbow", plotOutput("gg_rainbow")),
+                tabPanel("Plot_bubble", plotOutput("gg_bubble")),
+                tabPanel("Plot_map", plotOutput("gg_map")),
+                tabPanel("Plot_tree", plotOutput("gg_tree")),
+                tabPanel("Summary", verbatimTextOutput("sum")),
+                tabPanel("Structure", verbatimTextOutput("str"))
+                
+    ) # mainPanel
+  ) # sidebarLayout
+) # fluidPage
+
+# Define server logic required to draw a histogram
+server <- function(input, output, session) {
+  # Filter data based on selections
+  output$table <- DT::renderDataTable(DT::datatable({
+    data <- GG
+    if (input$ComCode != "All") {
+      data <- data[data$ComCode == input$ComCode,]
+    }
+    if (input$AppType != "All") {
+      data <- data[data$AppType == input$AppType,]
+    }
+    if (input$DocType != "All") {
+      data <- data[data$DocType == input$DocType,]
+    }
+    data
+  }))
+  
+  output$gg_bar <- renderPlot({
+    data <- GG
+    if (input$ComCode != "All") {
+      data <- data[data$ComCode == input$ComCode,]
+    }
+    Plot_bar
+    
+    if (input$AppType != "All") {
+      data <- data[data$AppType == input$AppType,]
+    }
+    Plot_bar
+    
+    if (input$AppType != "All") {
+      data <- data[data$AppType == input$AppType,]
+    }
+    Plot_bar
+    
+    if (input$DocType != "All") {
+      data <- data[data$DocType == input$DocType,]
+      Plot_bar
+    }
+  })
+
+  output$gg_rainbow <- renderPlot({
+    data <- GG
+    if (input$ComCode != "All") {
+      data <- data[data$ComCode == input$ComCode,]
+    }
+    Plot_rainbow
+    
+    if (input$AppType != "All") {
+      data <- data[data$AppType == input$AppType,]
+    }
+    Plot_rainbow
+    
+    if (input$AppType != "All") {
+      data <- data[data$AppType == input$AppType,]
+    }
+    Plot_rainbow
+    
+    if (input$DocType != "All") {
+      data <- data[data$DocType == input$DocType,]
+      Plot_bar
+    }
+  })
+  
+    output$gg_bubble <- renderPlot({
+    data <- GG
+    if (input$ComCode != "All") {
+      data <- data[data$ComCode == input$ComCode,]
+    }
+    Plot_bubble
+    
+    if (input$AppType != "All") {
+      data <- data[data$AppType == input$AppType,]
+    }
+    Plot_bubble
+    
+    if (input$AppType != "All") {
+      data <- data[data$AppType == input$AppType,]
+    }
+    Plot_bubble
+    
+    if (input$DocType != "All") {
+      data <- data[data$DocType == input$DocType,]
+      Plot_bar
+    }
+
+    output$gg_tree <- renderPlot({
+      data <- GG
+    if (input$ComCode != "All") {
+        data <- data[data$ComCode == input$ComCode,]
+    }
+    Plot_tree
+      
+    if (input$AppType != "All") {
+      data <- data[data$AppType == input$AppType,]
+    }
+    Plot_tree
+      
+    if (input$AppType != "All") {
+      data <- data[data$AppType == input$AppType,]
+    }
+    Plot_tree
+      
+    if (input$DocType != "All") {
+      data <- data[data$DocType == input$DocType,]
+      Plot_map
+        
+    output$gg_map <- renderPlot({
+        data <- GG
+    if (input$ComCode != "All") {
+        data <- data[data$ComCode == input$ComCode,]
+    }
+      Plot_tree
+          
+    if (input$AppType != "All") {
+        data <- data[data$AppType == input$AppType,]
+    }
+      Plot_tree
+          
+    if (input$AppType != "All") {
+        data <- data[data$AppType == input$AppType,]
+    }
+      Plot_tree
+          
+    if (input$DocType != "All") {
+        data <- data[data$DocType == input$DocType,]
+      Plot_tree        
+    }    
+  })
+  
+  output$sum <- renderPrint({
+    summary(GG)
+  })
+  
+  output$str <- renderPrint({
+    str(GG)
+  })
+  
+}
+
+
+# Run the application
+shinyApp(ui = ui, server = server)
+
+
 # ############ Pantos Exercise 1
 
 install.packages("shiny")
