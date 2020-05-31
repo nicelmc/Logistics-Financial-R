@@ -1,18 +1,7 @@
-# Pantos Internal Control SAP Slip Integration Approval Analysis (ggmap Chart)
 
 
-install.packages("ggmap")
-library(ggmap)
-register_google(key = 'AIzaSyBrUcwMtAX3mNqpvd5F4P48AM0FtFN0e@@')
-
-
-seoul_map <- get_map("seoul", zoom=11, maptype="roadmap")
-ggmap(seoul_map)
-
-
-
-# Pantos Internal Control SAP Slip Integration Approval Analysis (bubble Chart)
-
+# Pantos Internal Control SAP Slip Integration Approval Analysis
+install.packages("readxl")
 library(readxl)
 SAP_SLIP <- read_excel("SAP_SLIP.XLSX")
 View(SAP_SLIP)
@@ -20,11 +9,12 @@ View(SAP_SLIP)
 IC <- SAP_SLIP
 str(IC)
 
+install.packages("dplyr")
 library(dplyr)
+install.packages("reshape2")
 library(reshape2)
 
-IC <-IC %>%  rename(ComCode=회사코드, AppType=품의서구분, StaTus=상신상태,
-DocType="전표 유형")
+IC <-IC %>%  rename(ComCode=회사코드, AppType=품의서구분, StaTus=상신상태,DocType="전표 유형")
 str(IC)
 
 GG <- IC %>% 
@@ -35,31 +25,33 @@ str(GG)
 GG <- GG %>% rename(Total=".")
 View(GG)
 
+install.packages("ggplot2")
 library(ggplot2)
+View(GG)
 search()
 
-ggplot(GG, aes(x=Total, y=reorder(ComCode, Total, fill=AppType))) +
+Plot_bar <- ggplot(GG, aes(x=Total, y=reorder(ComCode, Total, fill=AppType))) +
   geom_bar(stat="identity", color="red") +
   ggtitle("ComCode AppType Count") +
   theme(plot.title=element_text(size=12)) +
   geom_text(aes(label=DocType))
 
 
-ggplot(GG, aes(x=reorder(ComCode, Total), y=Total, color=DocType, shape=AppType)) +
+Plot_rainbow <- ggplot(GG, aes(x=reorder(ComCode, Total), y=Total, color=DocType, shape=AppType)) +
   geom_point(size=3) +
   ggtitle("ComCode AppType Count") +
   theme(plot.title=element_text(size=12)) +
   geom_text(aes(label=DocType))
 
 
-ggplot(GG, aes(x=reorder(ComCode, Total), y=Total)) +
+Plot_bubble_x <- ggplot(GG, aes(x=reorder(ComCode, Total), y=Total)) +
   geom_point(aes(size=Total), shape=21, color="black", fill="yellow", alpha=0.8) +
   ggtitle("ComCode AppType Count") +
   theme(plot.title=element_text(size=12)) +
   geom_text(aes(label=DocType))
 
 
-ggplot(GG, aes(x=Total, y=reorder(ComCode, Total))) +
+Plot_bubble_y <- ggplot(GG, aes(x=Total, y=reorder(ComCode, Total))) +
   geom_point(aes(size=Total), shape=21, color="black", fill="yellow", alpha=0.8) +
   ggtitle("ComCode AppType Count") +
   theme(plot.title=element_text(size=12)) +
@@ -67,16 +59,113 @@ ggplot(GG, aes(x=Total, y=reorder(ComCode, Total))) +
   geom_text(aes(label=Total))
 
 
-SSG <- ggplot(GG, aes(y=Total, x=reorder(ComCode, Total))) +
+Plot_bubble <- ggplot(GG, aes(y=Total, x=reorder(ComCode, Total))) +
   geom_point(aes(size=Total), shape=21, color="black", fill="yellow", alpha=0.9) +
   ggtitle("ComCode AppType Count") +
   theme(plot.title=element_text(size=12)) +
   geom_text(aes(label=DocType, vjust=-1, hjust=1)) +
   geom_text(aes(label=Total))
 
-SSG
 View(GG)
 str(GG)
 
+library(readxl)
+GGMAP_Airport <- read_excel("GGMAP Airport.xlsx")
+View(GGMAP_Airport)
+GGM <- GGMAP_Airport
+GGM <- GGM[-89,]
+View(GGM)
 
+install.packages("ggmap")
+library(ggmap)
+register_google(key = 'AIzaSyBrUcwMtAX3mNqpvd5F4P48AM0FtFN0eXY')
+gc <- geocode(GGM$Airport)
+View(gc)
+GGM <- cbind(GGM,gc)
+View(GGM)
+
+install.packages("maps")
+library(maps)
+world <- map_data("world")
+Plot_map <- ggplot(GGM, aes(x=lon, y=lat)) +
+  geom_polygon(data=world, aes(x=long, y=lat, group=group), fill="grey75", color="grey75") +
+  geom_point(color="dark red", alpha=.25, aes(size=Total)) +
+  geom_point(color="dark red", alpha=.75, shape=1, aes(size=Total)) +
+  geom_text(label=GGM$CoCd, label=GGM$Total) +
+  theme(legend.position='none')
+
+
+
+install.packages("DT")
+library(DT)
+
+# library
+library(treemap)
+
+# Create data
+str(GG)
+GG_Group <- GG$ComCode
+GG_Subgroup <- GG$DocType
+GG_Value <- GG$Total
+GG_data <- data.frame(GG_Group, GG_Subgroup, GG_Value)
+
+# Build Dataset
+group <- c(rep("group-1",4),rep("group-2",2),rep("group-3",3))
+subgroup <- paste("subgroup" , c(1,2,3,4,1,2,1,2,3), sep="-")
+value <- c(13,5,22,12,11,7,3,1,23)
+data <- data.frame(group,subgroup,value)
+
+# treemap
+Plot_tree <- treemap(GG_data,
+        index=c("GG_Group", "GG_Subgroup"),
+        vSize="GG_Value",
+        type="index", 
+        palette="Set3",
+        title="My Treemap",
+        fontsize.title=15,
+        bg.labels=c("transparent"),
+        border.col=c("black","white"),             
+        border.lwds=c(2,1))                    
+
+# Install & library
+install.packages("ggplot2")
+install.packages("treemap")
+install.packages("devtools")
+devtools::install_github("timelyportfolio/d3treeR")
+1
+remove.packages("pkgload")
+install.packages("d3treeR")
+
+
+install.packages("viridisLite")
+devtools::install_version("gridSVG",version="1.6-0")
+
+
+library(treemap)
+library(d3treeR)
+
+# dataset
+group <- c(rep("group-1",4),rep("group-2",2),rep("group-3",3))
+subgroup <- paste("subgroup" , c(1,2,3,4,1,2,1,2,3), sep="-")
+value <- c(13,5,22,12,11,7,3,1,23)
+data <- data.frame(group,subgroup,value)
+
+# basic treemap
+p <- treemap(data,
+             index=c("group","subgroup"),
+             vSize="value",
+             type="index",
+             palette="Set2",
+             bg.labels=c("white"),
+             align.labels=list(
+               c("center", "center"), 
+               c("right", "bottom")
+               )  )
+
+# make it interactive ("rootname" becomes the title of the plot):
+inter <- d3tree2( p ,  rootname = "General")
+
+# save the widget
+# library(htmlwidgets)
+# saveWidget(inter, file=paste0( getwd(), "/HtmlWidget/interactiveTreemap.html"))
 
