@@ -1,0 +1,31 @@
+####### Pantos Internal Control SAP Slip Integration Approval Analysis #######
+
+library(readxl)
+SAP_SLIP <- read_excel("SAP SLIP.XLSX")
+View(SAP_SLIP)
+
+IC <- SAP_SLIP
+
+str(IC)
+
+install.packages("dplyr", dependencies=TRUE)
+install.packages("dplyr")
+library(dplyr)
+library(reshape2)
+install.packages("rlang", dependencies = TRUE)
+
+update.packages(checkBuilt=TRUE, ask=FALSE)
+
+
+IC <-IC %>%  rename(ComCode=회사코드, AppType=품의서구분, StaTus=상신상태,
+                    DocType="전표 유형")
+str(IC)
+
+
+GG <- IC %>% 
+  select(ComCode, AppType, StaTus, DocType) %>%
+  dcast(ComCode+AppType+DocType~., value.var="DocType", length)
+str(GG)
+
+GG <- GG %>% rename(Total=".")
+View(GG)
