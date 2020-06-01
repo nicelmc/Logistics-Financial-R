@@ -1,18 +1,19 @@
-# library
+# Visualize in treemap
+
+install.packages("treemap")
 library(treemap)
 
-# Create data
 str(GG)
 GG_Group <- GG$ComCode
+GG_Subgroup <- GG$DocType
 GG_Value <- GG$Total
-GG_data <- data.frame(GG_Group, GG_Value)
-
-group <- c("group-1","group-2","group-3")
-value <- c(13,5,22)
-data <- data.frame(group,value)
-
-# treemap
-treemap(GG_data,
-        index="GG_Group",
+GG_data <- data.frame(GG_Group, GG_Subgroup, GG_Value)
+tree_map <- treemap(GG_data,
+        index=c("GG_Group", "GG_Subgroup"),
         vSize="GG_Value",
-        type="index")
+        type="index",
+        bg.labels=c("transparent"),
+        inflate.labels=F,
+        border.col=c("black","white"),           
+        border.lwds=c(3,1)
+        )
