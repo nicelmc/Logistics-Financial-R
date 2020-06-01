@@ -1,0 +1,7 @@
+# Version Check
+version
+
+# Updating R.
+updateR()
+install.packages("installr")
+library(installr)
