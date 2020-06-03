@@ -1,0 +1,49 @@
+
+# Compute percentages
+data$fraction <- data$Total/sum(data$Total)
+# Compute the cumulative percentages (top of each rectangle)
+data$ymax <- cumsum(data$fraction)
+# Compute the bottom of each rectangle
+data$ymin <- c(0, head(data$ymax, n=-1))
+# Compute label position
+data$labelPosition <- (data$ymax + data$ymin) / 2
+# Compute a good label
+data$label <- paste0(data$DocType, "\n value: ", data$Total)
+# Make the plot
+gg_donut <- ggplot(data, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=ComCode)) +
+  geom_rect() +
+  coord_polar(theta="y") + # Try to remove that to understand how the chart is built initially
+  xlim(c(2, 4)) # Try to remove that to see how to make a pie chart
+
+library(ggplot2)
+# Basic piechart
+gg_pie <- ggplot(data, aes(x="", y=Total, fill=ComCode)) +
+  geom_bar(stat="identity", width=1, color="white", aes(fill=DocType)) +
+  coord_polar("y", start=0) +
+  theme_void()
+
+
+
+# Libraries
+install.packages("packcircles")
+library(packcircles)
+library(ggplot2)
+
+data <- GG
+packing <- circleProgressiveLayout(data$Total, data$DocType, sizetype='area')
+data <- cbind(data, packing)
+dat.gg <- circleLayoutVertices(packing, npoints=50)
+str(dat.gg)
+str(data)
+
+# Make the plot
+gg_packing_circle <- ggplot() + 
+  # Make the bubbles
+  geom_polygon(data = dat.gg, aes(x, y, group = id, fill=as.factor(id)), colour = "black", alpha = 0.6) +
+  # Add text in the center of each bubble + control its size
+  geom_text(data = data, aes(x, y, size=Total, label=ComCode)) +
+  scale_size_continuous(range = c(1,4)) +
+  # General theme:
+  theme_void() + 
+  theme(legend.position="none") +
+  coord_equal()
