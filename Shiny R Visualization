@@ -8,23 +8,28 @@
 #
 
 
-install.packages("shiny")
+
 runExample()
 sessionInfo()
 update.packages(ask =FALSE)
 
 
-# ############ Pantos Exercise 1
+# ############ Pantos Exercise 
 
-
+install.packages("shiny")
+install.packages("htmlwidgets")
+library(htmlwidgets)
 library(shiny)
+
+
+
 
 ui <- fluidPage(
     # Application title
     titlePanel(title=h2("SAP Manual Slip Approval Status", align="center")),
     # Sidebar with a select input for number of bins
     sidebarLayout(
-        fluidRow(
+        fluidPage(
             column(4,
                    selectInput("ComCode",
                                "Company Code :",
@@ -58,7 +63,7 @@ ui <- fluidPage(
     ) # sidebarLayout
 ) # fluidPage
 
-# Define server logic required to draw a histogram
+# Define server logic required to draw various Plots
 server <- function(input, output, session) {
     # Filter data based on selections
     output$table <- DT::renderDataTable(DT::datatable({
@@ -80,17 +85,22 @@ server <- function(input, output, session) {
         if (input$ComCode != "All") {
             data <- data[data$ComCode == input$ComCode,]
         }
-        gg_bar
+        
         
         if (input$AppType != "All") {
             data <- data[data$AppType == input$AppType,]
         }
-        gg_bar
+        
         
         if (input$DocType != "All") {
             data <- data[data$DocType == input$DocType,]
         }
-        gg_bar
+        ggplot(data, aes(x=Total, y=reorder(ComCode, Total, fill=AppType))) +
+            geom_bar(stat="identity", fill="blue", color="black", alpha=.3) +
+            ggtitle("ComCode AppType Count") +
+            theme(plot.title=element_text(size=12)) +
+            geom_text(aes(label=DocType))
+        
     })
     
     output$gg_rainbow <- renderPlot({
@@ -98,17 +108,21 @@ server <- function(input, output, session) {
         if (input$ComCode != "All") {
             data <- data[data$ComCode == input$ComCode,]
         }
-        gg_rainbow
+        
         
         if (input$AppType != "All") {
             data <- data[data$AppType == input$AppType,]
         }
-        gg_rainbow
+        
         
         if (input$DocType != "All") {
             data <- data[data$DocType == input$DocType,]
         }
-        gg_rainbow
+        ggplot(data, aes(x=reorder(ComCode, Total), y=Total, color=DocType, shape=AppType)) +
+            geom_point(size=3) +
+            ggtitle("ComCode AppType Count") +
+            theme(plot.title=element_text(size=12)) +
+            geom_text(aes(label=DocType))
     })
     
     output$gg_bubble <- renderPlot({
@@ -116,35 +130,45 @@ server <- function(input, output, session) {
         if (input$ComCode != "All") {
             data <- data[data$ComCode == input$ComCode,]
         }
-        gg_bubble
+        
         
         if (input$AppType != "All") {
             data <- data[data$AppType == input$AppType,]
         }
-        gg_bubble
+        
         
         if (input$DocType != "All") {
             data <- data[data$DocType == input$DocType,]
         }
-        gg_bubble
+        ggplot(data, aes(y=Total, x=reorder(ComCode, Total))) +
+            geom_point(aes(size=Total), shape=21, color="black", fill="yellow", alpha=0.9) +
+            ggtitle("ComCode AppType Count") +
+            theme(plot.title=element_text(size=12)) +
+            geom_text(aes(label=DocType, vjust=-1, hjust=1)) +
+            geom_text(aes(label=Total))
     })
     
     output$gg_map <- renderPlot({
-        data <- GG
+        data <- GGM
         if (input$ComCode != "All") {
             data <- data[data$ComCode == input$ComCode,]
         }
-        gg_map
+        
         
         if (input$AppType != "All") {
             data <- data[data$AppType == input$AppType,]
         }
-        gg_map
+        
         
         if (input$DocType != "All") {
             data <- data[data$DocType == input$DocType,]
         }
-        gg_map
+        ggplot(GGM, aes(x=lon, y=lat)) +
+            geom_polygon(data=world, aes(x=long, y=lat, group=group), fill="grey75", color="grey70") +
+            geom_point(color="red", alpha=.50, aes(size=Total)) +
+            geom_point(color="red", alpha=.90, shape=3, aes(size=Total)) +
+            geom_text(label=df$CoCd, color="black")
+        theme(legend.position='none')
     })
     
     output$tree_map <- renderPlot({
@@ -162,7 +186,18 @@ server <- function(input, output, session) {
         if (input$DocType != "All") {
             data <- data[data$DocType == input$DocType,]
         }
-        tree_map
+        treemap(data,
+                index=c("ComCode", "DocType"),
+                vSize="Total",
+                type="index",
+                palette = "Set3",
+                bg.labels=c("transparent"),
+                inflate.labels=F,
+                border.col=c("black","white"),           
+                border.lwds=c(3,1),
+                title="Company Monthly DocType",
+                fontsize.title=12
+        )
     })
     
     output$sum <- renderPrint({
