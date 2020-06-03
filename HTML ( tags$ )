@@ -1,0 +1,9 @@
+HTML(
+    '<div class="container-fluid">
+    tags$img(height=55, width=110, src="http://www.pantos.com/resources/front/normal/kr/img/common/ci.gif")
+  # Application title
+  titlePanel(title=h3("SAP Manual Slip Approval Status", align="center"))
+  <p>Beyond Logistics Besides <a herf="http://www.pantos.com/kr/main.do"> Pantos</a></p>
+    </div>'
+  )
+
