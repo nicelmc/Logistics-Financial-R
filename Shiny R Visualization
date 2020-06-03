@@ -56,6 +56,7 @@ ui <- fluidPage(
                     tabPanel("Plot_bubble", plotOutput("gg_bubble")),
                     tabPanel("Plot_map", plotOutput("gg_map")),
                     tabPanel("Plot_tree", plotOutput("tree_map")),
+                    tabPanel("Plot_packing_circle", plotOutput("gg_packing_circle")),
                     tabPanel("Summary", verbatimTextOutput("sum")),
                     tabPanel("Structure", verbatimTextOutput("str"))
                     
@@ -176,12 +177,12 @@ server <- function(input, output, session) {
         if (input$ComCode != "All") {
             data <- data[data$ComCode == input$ComCode,]
         }
-        tree_map
+        
         
         if (input$AppType != "All") {
             data <- data[data$AppType == input$AppType,]
         }
-        tree_map
+        
         
         if (input$DocType != "All") {
             data <- data[data$DocType == input$DocType,]
@@ -200,6 +201,33 @@ server <- function(input, output, session) {
         )
     })
     
+    output$gg_packing_circle <- renderPlot({
+        data <- data
+        if (input$ComCode != "All") {
+            data <- data[data$ComCode == input$ComCode,]
+        }
+        
+        
+        if (input$AppType != "All") {
+            data <- data[data$AppType == input$AppType,]
+        }
+        
+        
+        if (input$DocType != "All") {
+            data <- data[data$DocType == input$DocType,]
+        }
+        ggplot() + 
+            # Make the bubbles
+            geom_polygon(data = dat.gg, aes(x, y, group = id, fill=as.factor(id)), colour = "black", alpha = 0.6) +
+            # Add text in the center of each bubble + control its size
+            geom_text(data = data, aes(x, y, size=Total, label=ComCode)) +
+            scale_size_continuous(range = c(1,4)) +
+            # General theme:
+            theme_void() + 
+            theme(legend.position="none") +
+            coord_equal()
+    })
+        
     output$sum <- renderPrint({
         summary(GG)
     })
