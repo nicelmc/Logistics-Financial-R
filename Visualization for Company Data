@@ -1,0 +1,276 @@
+#
+# This is a Shiny web application. You can run the application by clicking
+# the 'Run App' button above.
+#
+# Find out more about building applications with Shiny here:
+#
+#    http://shiny.rstudio.com/
+#
+
+
+
+runExample()
+sessionInfo()
+update.packages(ask =FALSE)
+
+
+# ############ Pantos Exercise 
+
+install.packages("shiny")
+install.packages("htmlwidgets")
+
+library(ggplot2)
+library(ggmap)
+library(maps)
+library(treemap)
+library(packcircles)
+library(hrbrthemes)
+library(htmlwidgets)
+library(shiny)
+
+
+ui <- fluidPage(# Company Logo
+    img(src = "http://www.pantos.com/resources/front/normal/kr/img/common/ci.gif", height = 35, width = 72),
+    # Company Slogan
+    p("Beyond Logistics Besides You"),br(),
+    a(h4("Pantos 2020"), 
+      href = "http://www.pantos.com/kr/main.do?lang=kr#whyPantos"),br(),
+    # Application title
+    titlePanel(title=h3("SAP Manual Slip Management Status", align="center")),
+    # Sidebar with a select input for number of bins
+    sidebarLayout(
+        navbarPage(
+            column(4,
+                   selectInput("ComCode",
+                               "Company Code :",
+                               c("All",
+                                 unique(as.character(GG$ComCode))))),
+            column(4,
+                   selectInput("AppType",
+                               "Approval Type :",
+                               c("All",
+                                 unique(as.character(GG$AppType))))),
+        ),
+        column(4,
+               selectInput("DocType",
+                           "Document Type :",
+                           c("All",
+                             unique(as.character(GG$DocType))))),
+    ),# sidebarPanel
+    # Show a plot of the generated distribution
+    mainPanel(
+        tabsetPanel(type="tab",
+                    tabPanel("Data", DT::dataTableOutput("table")),
+                    tabPanel("Plot_bar", plotOutput("gg_bar")),
+                    tabPanel("Plot_rainbow", plotOutput("gg_rainbow")),
+                    tabPanel("Plot_bubble", plotOutput("gg_bubble")),
+                    tabPanel("Plot_map", plotOutput("gg_map")),
+                    tabPanel("Plot_tree", plotOutput("tree_map")),
+                    tabPanel("Plot_packing_circle", plotOutput("gg_packing_circle")),
+                    tabPanel("Plot_heatmap", plotOutput("gg_heatmap")),
+                    tabPanel("Summary", verbatimTextOutput("sum")),
+                    tabPanel("Structure", verbatimTextOutput("str"))
+                    
+        ) # mainPanel
+    ) # sidebarLayout
+) # fluidPage
+
+# Define server logic required to draw various Plots
+server <- function(input, output, session) {
+    # Filter data based on selections
+    output$table <- DT::renderDataTable(DT::datatable({
+        data <- GG
+        if (input$ComCode != "All") {
+            data <- data[data$ComCode == input$ComCode,]
+        }
+        if (input$AppType != "All") {
+            data <- data[data$AppType == input$AppType,]
+        }
+        if (input$DocType != "All") {
+            data <- data[data$DocType == input$DocType,]
+        }
+        data
+    }))
+    
+    output$gg_bar <- renderPlot({
+        data <- GG
+        if (input$ComCode != "All") {
+            data <- data[data$ComCode == input$ComCode,]
+        }
+        
+        
+        if (input$AppType != "All") {
+            data <- data[data$AppType == input$AppType,]
+        }
+        
+        
+        if (input$DocType != "All") {
+            data <- data[data$DocType == input$DocType,]
+        }
+        ggplot(data, aes(x=Total, y=reorder(ComCode, Total, fill=AppType))) +
+            geom_bar(stat="identity", fill="blue", color="black", alpha=.3) +
+            ggtitle("ComCode AppType Count") +
+            theme(plot.title=element_text(size=12)) +
+            geom_text(aes(label=DocType))
+        
+    })
+    
+    output$gg_rainbow <- renderPlot({
+        data <- GG
+        if (input$ComCode != "All") {
+            data <- data[data$ComCode == input$ComCode,]
+        }
+        
+        
+        if (input$AppType != "All") {
+            data <- data[data$AppType == input$AppType,]
+        }
+        
+        
+        if (input$DocType != "All") {
+            data <- data[data$DocType == input$DocType,]
+        }
+        ggplot(data, aes(x=reorder(ComCode, Total), y=Total, color=DocType, shape=AppType)) +
+            geom_point(size=3) +
+            ggtitle("ComCode AppType Count") +
+            theme(plot.title=element_text(size=12)) +
+            geom_text(aes(label=DocType))
+    })
+    
+    output$gg_bubble <- renderPlot({
+        data <- GG
+        if (input$ComCode != "All") {
+            data <- data[data$ComCode == input$ComCode,]
+        }
+        
+        
+        if (input$AppType != "All") {
+            data <- data[data$AppType == input$AppType,]
+        }
+        
+        
+        if (input$DocType != "All") {
+            data <- data[data$DocType == input$DocType,]
+        }
+        ggplot(data, aes(y=Total, x=reorder(ComCode, Total))) +
+            geom_point(aes(size=Total), shape=21, color="black", fill="yellow", alpha=0.9) +
+            ggtitle("ComCode AppType Count") +
+            theme(plot.title=element_text(size=12)) +
+            geom_text(aes(label=DocType, vjust=-1, hjust=1)) +
+            geom_text(aes(label=Total))
+    })
+    
+    output$gg_map <- renderPlot({
+        data <- GGM
+        if (input$ComCode != "All") {
+            data <- data[data$ComCode == input$ComCode,]
+        }
+        
+        
+        if (input$AppType != "All") {
+            data <- data[data$AppType == input$AppType,]
+        }
+        
+        
+        if (input$DocType != "All") {
+            data <- data[data$DocType == input$DocType,]
+        }
+        ggplot(GGM, aes(x=lon, y=lat)) +
+            geom_polygon(data=world, aes(x=long, y=lat, group=group), fill="grey75", color="grey70") +
+            geom_point(color="red", alpha=.50, aes(size=Total)) +
+            geom_point(color="red", alpha=.90, shape=3, aes(size=Total)) +
+            geom_text(label=df$CoCd, color="black")
+        theme(legend.position='none')
+    })
+    
+    output$tree_map <- renderPlot({
+        data <- GG
+        if (input$ComCode != "All") {
+            data <- data[data$ComCode == input$ComCode,]
+        }
+        
+        
+        if (input$AppType != "All") {
+            data <- data[data$AppType == input$AppType,]
+        }
+        
+        
+        if (input$DocType != "All") {
+            data <- data[data$DocType == input$DocType,]
+        }
+        treemap(data,
+                index=c("ComCode", "DocType"),
+                vSize="Total",
+                type="index",
+                palette = "Set3",
+                bg.labels=c("transparent"),
+                inflate.labels=F,
+                border.col=c("black","white"),           
+                border.lwds=c(3,1),
+                title="Company Monthly DocType",
+                fontsize.title=12
+        )
+    })
+    
+    output$gg_packing_circle <- renderPlot({
+        data <- data
+        if (input$ComCode != "All") {
+            data <- data[data$ComCode == input$ComCode,]
+        }
+        
+        
+        if (input$AppType != "All") {
+            data <- data[data$AppType == input$AppType,]
+        }
+        
+        
+        if (input$DocType != "All") {
+            data <- data[data$DocType == input$DocType,]
+        }
+        ggplot() + 
+            # Make the bubbles
+            geom_polygon(data = dat.gg, aes(x, y, group = id, fill=as.factor(id)), colour = "black", alpha = 0.6) +
+            # Add text in the center of each bubble + control its size
+            geom_text(data = data, aes(x, y, size=Total, label=ComCode)) +
+            scale_size_continuous(range = c(1,4)) +
+            # General theme:
+            theme_void() + 
+            theme(legend.position="none") +
+            coord_equal()
+    })
+    
+    output$gg_heatmap <- renderPlot({
+        data <- GG
+        if (input$ComCode != "All") {
+            data <- data[data$ComCode == input$ComCode,]
+        }
+        
+        
+        if (input$AppType != "All") {
+            data <- data[data$AppType == input$AppType,]
+        }
+        
+        
+        if (input$DocType != "All") {
+            data <- data[data$DocType == input$DocType,]
+        }
+        ggplot(data, aes(ComCode, DocType, fill= Total)) + 
+            geom_tile() +
+            theme_ipsum()
+    })
+        
+    output$sum <- renderPrint({
+        summary(GG)
+    })
+    
+    output$str <- renderPrint({
+        str(GG)
+    })
+    
+}
+
+
+# Run the application
+shinyApp(ui = ui, server = server)
+
+
