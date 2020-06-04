@@ -1,3 +1,7 @@
+
+### shiny R Lesson 2
+
+
 HTML(
     '<div class="container-fluid">
     tags$img(height=55, width=110, src="http://www.pantos.com/resources/front/normal/kr/img/common/ci.gif")
@@ -29,3 +33,21 @@ img	<img>	An image
 strong	<strong>	Bold text
 em	<em>	Italicized text
 HTML	 	Directly passes a character string as HTML code
+
+### shiny R Lesson 3
+
+function	widget
+actionButton	Action Button
+checkboxGroupInput	A group of check boxes
+checkboxInput	A single check box
+dateInput	A calendar to aid date selection
+dateRangeInput	A pair of calendars for selecting a date range
+fileInput	A file upload control wizard
+helpText	Help text that can be added to an input form
+numericInput	A field to enter numbers
+radioButtons	A set of radio buttons
+selectInput	A box with choices to select from
+sliderInput	A slider bar
+submitButton	A submit button
+textInput	A field to enter text
+
