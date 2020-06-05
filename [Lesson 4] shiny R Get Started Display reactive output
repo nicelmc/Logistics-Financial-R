@@ -1,0 +1,26 @@
+
+
+Step 1: Add an R object to the UI
+
+Shiny provides a family of functions that turn R objects into output for your user interface. Each function creates a specific type of output.
+
+Output function	Creates
+dataTableOutput	DataTable
+htmlOutput	raw HTML
+imageOutput	image
+plotOutput	plot
+tableOutput	table
+textOutput	text
+uiOutput	raw HTML
+verbatimTextOutput	text
+
+
+Step 2: Provide R code to build the object.
+render function	creates
+renderDataTable	DataTable
+renderImage	images (saved as a link to a source file)
+renderPlot	plots
+renderPrint	any printed output
+renderTable	data frame, matrix, other table like structures
+renderText	character strings
+renderUI	a Shiny tag object or HTML
