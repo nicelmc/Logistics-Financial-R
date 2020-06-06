@@ -49,7 +49,7 @@ ui <- fluidPage(
     ),# sidebarPanel
     # Show a plot of the generated distribution
     mainPanel(
-        tabsetPanel(type="tab",
+        navlistPanel("navlistPanel",
                     tabPanel("Data", DT::dataTableOutput("table")),
                     tabPanel("Plot_bar", plotOutput("gg_bar")),
                     tabPanel("Plot_rainbow", plotOutput("gg_rainbow")),
