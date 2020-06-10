@@ -1,0 +1,39 @@
+
+# SAP Manual Slip Monitoring(May)
+
+library(readxl)
+SAP_Manual_Slip_Summary_May_ <- read_excel("SAP Manual Slip Summary (May).XLSX")
+View(SAP_Manual_Slip_Summary_May_)
+
+Sum_May <- SAP_Manual_Slip_Summary_May_
+Sum_May <- Sum_May[-60,]
+str(Sum_May)
+
+
+library(dplyr)
+library(reshape2)
+Sum_May <- Sum_May %>% rename(ComCode="회사코드", ComName="회사 이름", Total="전체", App_not="상신미대상"          , App="상신대상", App_finish="상신대상-결재완료", App_process="상신대상-결재중", App_unreq="상신대상-미상신", DocType_CXJ4="전표처리(F-02, F-04)", DocType_CC="전표유형CC" )
+
+
+library(ggplot2)
+# gg_bar
+ggplot(Sum_May, aes(x=Total, y=reorder(ComCode, Total, fill=Total))) +
+  geom_bar(stat="identity", fill="blue", color="black", alpha=.3) +
+  ggtitle("ComCode AppType Count") +
+  theme(plot.title=element_text(size=12)) +
+  geom_text(aes(label=Total))
+
+# gg_rainbow
+ggplot(Sum_May, aes(x=reorder(ComCode, Total), y=Total, color=Total)) +
+  geom_point(size=3) +
+  ggtitle("ComCode Manual Slip Sum") +
+  theme(plot.title=element_text(size=12)) +
+  geom_text(aes(label=Total))
+
+# gg_bubble
+ggplot(Sum_May, aes(y=Total, x=reorder(ComCode, Total))) +
+  geom_point(aes(size=Total), shape=21, color="black", fill="yellow", alpha=0.9) +
+  ggtitle("ComCode AppType Count") +
+  theme(plot.title=element_text(size=12)) +
+  geom_text(aes(label=Total, vjust=-1, hjust=1)) +
+  geom_text(aes(label=Total))
